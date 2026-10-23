@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function admin() {
+      return request.auth != null && request.auth.uid == 'THAY_UID_ADMIN_VAO_DAY';
+    }
+    function validProduct() {
+      let d = request.resource.data;
+      return d.keys().hasAll(['tenSanPham', 'loaiSanPham', 'gia'])
+        && d.keys().hasOnly(['tenSanPham', 'loaiSanPham', 'gia'])
+        && d.tenSanPham is string && d.tenSanPham.size() > 0 && d.tenSanPham.size() <= 100
+        && d.loaiSanPham is string && d.loaiSanPham.size() > 0 && d.loaiSanPham.size() <= 100
+        && d.gia is number && d.gia >= 0 && d.gia <= 1000000000;
+    }
+    match /products/{productId} {
+      allow read, delete: if admin();
+      allow create, update: if admin() && validProduct();
+    }
+  }
+}

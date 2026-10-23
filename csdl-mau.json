@@ -1,0 +1,6 @@
+{
+  "products": {
+    "sanpham01": {"tenSanPham": "Áo thun trắng", "loaiSanPham": "Áo nam", "gia": 150000},
+    "sanpham02": {"tenSanPham": "Quần jean xanh", "loaiSanPham": "Quần nam", "gia": 250000}
+  }
+}
