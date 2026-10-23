@@ -157,7 +157,6 @@ public class MainActivity extends Activity {
         Map<String,Object> data=new HashMap<>(); data.put("tenSanPham",n); data.put("loaiSanPham",c); data.put("gia",amount);
         DocumentReference ref = editingId==null ? db.collection("products").document() : db.collection("products").document(editingId);
         setBusy(true);
-        // set cho tài liệu mới, update khi sửa để không tạo lại tài liệu đã bị xóa từ thiết bị khác.
         com.google.android.gms.tasks.Task<Void> task = editingId==null ? ref.set(data) : ref.update(data);
         task.addOnSuccessListener(x -> { clearForm(); message("Đã lưu trên Firestore."); })
             .addOnFailureListener(e -> message("Lưu thất bại: " + e.getMessage()))
@@ -165,7 +164,6 @@ public class MainActivity extends Activity {
     }
     private void exportJson() {
         if(busy) { message("Chờ lưu xong rồi xuất JSON."); return; }
-        // Đọc từ server, không lấy cache để tránh nộp dữ liệu chưa đồng bộ.
         export.setEnabled(false);
         db.collection("products").get(Source.SERVER).addOnSuccessListener(snap -> {
             try {
